@@ -218,11 +218,11 @@ module LegacyWorksheet
 
     return nil unless column_exists(column_index)
 
-    sheet_data.rows.each { |row| row.cells.delete_at(column_index) }
+    sheet_data.rows.each { |row| row && row.cells.delete_at(column_index) }
 
     # Change column numbers for cells to the right of the deleted column
     sheet_data.rows.each_with_index { |row, row_index|
-      row.cells.each_with_index { |c, column_index|
+      row && row.cells.each_with_index { |c, column_index|
         c.column = column_index if c.is_a?(Cell)
       }
     }
@@ -240,6 +240,7 @@ module LegacyWorksheet
 
     #go through each cell in column
     sheet_data.rows.each_with_index { |row, row_index|
+      next unless row
       old_cell = row[column_index]
       c = nil
 

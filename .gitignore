@@ -1,9 +1,9 @@
 *.DS_Store
 *.gem
 *.swp
-*.xls?
 *.tmp
 .bundle
+.idea
 bin
 vendor
 lib/tests/

@@ -822,6 +822,13 @@ describe RubyXL::Worksheet do
         @worksheet.delete_column(-1)
       }.to raise_error
     end
+
+    it 'should delete a column despite a nil row' do
+      worksheet = parse_test_xlsx_file
+      expect(worksheet[1][1]).to be_nil
+      worksheet.delete_column(1)
+      expect(worksheet[1][1].value).not_to be_nil
+    end
   end
 
   describe '.insert_column' do
@@ -868,6 +875,16 @@ describe RubyXL::Worksheet do
       expect(@worksheet.sheet_data[0].size).to eq(11)
       @worksheet.insert_column(11)
       expect(@worksheet.sheet_data[0].size).to eq(13)
+    end
+
+    # The test file contains a merged cell spanning two rows---the second one
+    # is parsed as nil.
+    it 'should insert a column despite a nil row' do
+      worksheet = parse_test_xlsx_file
+      text = 'This cell extends to the following row.'
+      expect(worksheet[1][2].value).to eq(text)
+      worksheet.insert_column(1)
+      expect(worksheet[1][3].value).to eq(text)
     end
   end
 
@@ -1619,6 +1636,13 @@ describe RubyXL::Worksheet do
 
     end
 
+  end
+
+  def parse_test_xlsx_file
+    basedir = File.dirname(__FILE__)
+    path = File.expand_path('../../test/input/test.xlsx', basedir)
+    workbook = RubyXL::Parser.parse(path)
+    workbook.worksheets[0]
   end
 
 end

@@ -12,5 +12,5 @@ group :development do
   gem "simplecov", ">= 0"
   gem "rspec", ">= 1.3.4"
 
-  gem 'stackprof'
+  gem 'stackprof' unless defined? JRUBY_VERSION
 end
